@@ -23,7 +23,7 @@ https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 First the datasets and libraries need to be loaded.
 
 
-```{r}
+```{r, echo=FALSE}
 pml.training <- read.csv("~/Coursera/MachineLearning/pml-training.csv")
 
 pml.testing <- read.csv("~/Coursera/MachineLearning/pml-testing.csv")
@@ -41,7 +41,7 @@ testing <- pmlData[-inTrain,]
 
 
 Using head(training) I noticed there were a lot of divide by zero entries. I cleaned these out by running the following code. I also removed the X variable as it was an index and seemed to overfit our data. I removed all timestamps. I also remove all data where new window was equal to yes. This data had statistics that seemed to be created by the data authors. I also removed any varaible that contained total or var for the smae reason. At this point I had the measurements from the devices themselves. The nearZeroVar and findCorrelation functions could have been used for this as well.
-```{r}
+```{r, echo=FALSE}
 training <- tbl_df(training)
 training <- training[training$new_window=="no",]
 dataNA <- lapply(training, mean) == "NA"
@@ -106,7 +106,7 @@ model_rf_final$finalModel
 
 ###When run on our test data this is what we got.
 ```{r}
-results <- predict(model_rf, testing)
+results <- predict(model_rf_final, testing)
 table(testing$classe, results)
 ```
 ###Course test data
