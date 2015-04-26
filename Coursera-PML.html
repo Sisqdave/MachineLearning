@@ -76,66 +76,315 @@ img {
 <div id="exploratory-analysis-and-preprocessing" class="section level1">
 <h1>Exploratory analysis and preprocessing</h1>
 <p>First the datasets and libraries need to be loaded.</p>
-<p>pml.training &lt;- read.csv(“~/Coursera/MachineLearning/pml-training.csv”)</p>
-<p>pml.testing &lt;- read.csv(“~/Coursera/MachineLearning/pml-testing.csv”) ###load libraries library(caret) library(plyr) library(dplyr)</p>
-<p>set.seed(20152015) pmlData &lt;- tbl_df(pml.training) inTrain &lt;- createDataPartition(pmlData, p=0.70, list=FALSE) training &lt;- pmlData[inTrain,] testing &lt;- pmlData[-inTrain,]</p>
+<pre class="r"><code>pml.training &lt;- read.csv(&quot;~/Coursera/MachineLearning/pml-training.csv&quot;)
+
+pml.testing &lt;- read.csv(&quot;~/Coursera/MachineLearning/pml-testing.csv&quot;)
+###load libraries
+library(caret)</code></pre>
+<pre><code>## Loading required package: lattice
+## Loading required package: ggplot2</code></pre>
+<pre class="r"><code>library(plyr)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: 'dplyr'
+## 
+## The following objects are masked from 'package:plyr':
+## 
+##     arrange, count, desc, failwith, id, mutate, rename, summarise,
+##     summarize
+## 
+## The following object is masked from 'package:stats':
+## 
+##     filter
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>set.seed(20152015)
+pmlData &lt;- pml.training
+inTrain &lt;- createDataPartition(pmlData$classe, p=0.70, list=FALSE)
+training &lt;- pmlData[inTrain,]
+testing &lt;- pmlData[-inTrain,]</code></pre>
 <p>Using head(training) I noticed there were a lot of divide by zero entries. I cleaned these out by running the following code. I also removed the X variable as it was an index and seemed to overfit our data. I removed all timestamps. I also remove all data where new window was equal to yes. This data had statistics that seemed to be created by the data authors. I also removed any varaible that contained total or var for the smae reason. At this point I had the measurements from the devices themselves. The nearZeroVar and findCorrelation functions could have been used for this as well.</p>
-<p>training &lt;- training[training$new_window==“no”,] dataNA &lt;- lapply(training, mean) == “NA” NAvar &lt;- names(training[dataNA]) training &lt;- select(training, -one_of(NAvar[2:102])) var2 &lt;- c(“X”,“raw_timestamp_part_1”,“raw_timestamp_part_2”,“num_window” ) training &lt;- select(training, -one_of(var2)) training &lt;- select(training, -contains(“total”)) training &lt;- select(training, -contains(“var”))</p>
+<pre class="r"><code>training &lt;- tbl_df(training)
+training &lt;- training[training$new_window==&quot;no&quot;,]
+dataNA &lt;- lapply(training, mean) == &quot;NA&quot;</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre class="r"><code>NAvar &lt;- names(training[dataNA])
+training &lt;- select(training, -one_of(NAvar[2:102]))
+var2 &lt;- c(&quot;X&quot;,&quot;raw_timestamp_part_1&quot;,&quot;raw_timestamp_part_2&quot;,&quot;num_window&quot; )
+training &lt;- select(training, -one_of(var2))
+training &lt;- select(training, -contains(&quot;total&quot;))
+training &lt;- select(training, -contains(&quot;var&quot;))</code></pre>
 </div>
 <div id="model-building" class="section level1">
 <h1>Model building</h1>
 <p>I ran the models below on a random sample of the training data to increase speed and get an idea of which model would work best.</p>
-<p>trainingSample &lt;- training[sample(nrow(training), 1000), ] model_rf &lt;- train(classe ~ ., method=“rf”, data=trainingSample)</p>
-<p>model_gbm &lt;- train(classe ~ ., method=“gbm”, data=trainingSample, verbose=FALSE)</p>
-<p>model_rpart &lt;- train(classe ~ ., method=“rpart”, data=trainingSample)</p>
+<pre class="r"><code>trainingSample &lt;- training[sample(nrow(training), 1000), ]
+model_rf &lt;- train(classe ~ ., method=&quot;rf&quot;, data=trainingSample)</code></pre>
+<pre><code>## Loading required package: randomForest
+## randomForest 4.6-10
+## Type rfNews() to see new features/changes/bug fixes.
+## 
+## Attaching package: 'randomForest'
+## 
+## The following object is masked from 'package:dplyr':
+## 
+##     combine</code></pre>
+<pre class="r"><code>model_gbm &lt;- train(classe ~ ., method=&quot;gbm&quot;, data=trainingSample, verbose=FALSE)</code></pre>
+<pre><code>## Loading required package: gbm
+## Loading required package: survival
+## 
+## Attaching package: 'survival'
+## 
+## The following object is masked from 'package:caret':
+## 
+##     cluster
+## 
+## Loading required package: splines
+## Loading required package: parallel
+## Loaded gbm 2.1.1</code></pre>
+<pre class="r"><code>model_rpart &lt;- train(classe ~ ., method=&quot;rpart&quot;, data=trainingSample)</code></pre>
+<pre><code>## Loading required package: rpart</code></pre>
 <div id="results-for-using-the-rf-method-were-as-follows" class="section level3">
 <h3>Results for using the rf method were as follows:</h3>
 <p>Overall accuracy was 87.5% with an error rate of 8.8%. this was the best result out of the three methods.</p>
-<p>Call: randomForest(x = x, y = y, mtry = param$mtry) Type of random forest: classification Number of trees: 500 No. of variables tried at each split: 2</p>
-<pre><code>    OOB estimate of  error rate: 8.8%</code></pre>
-<p>Confusion matrix: A B C D E class.error A 281 3 2 1 1 0.02430556 B 16 156 16 2 0 0.17894737 C 1 10 162 3 0 0.07954545 D 4 0 12 148 2 0.10843373 E 1 4 6 4 165 0.08333333</p>
-<p>Random Forest</p>
-<p>1000 samples 49 predictor 5 classes: ‘A’, ‘B’, ‘C’, ‘D’, ‘E’</p>
-<p>No pre-processing Resampling: Bootstrapped (25 reps)</p>
-<p>Summary of sample sizes: 1000, 1000, 1000, 1000, 1000, 1000, …</p>
-<p>Resampling results across tuning parameters:</p>
-<p>mtry Accuracy Kappa Accuracy SD Kappa SD<br /> 2 0.8759876 0.8427919 0.02013730 0.02541146 27 0.8691706 0.8341434 0.01948372 0.02464619 53 0.8546588 0.8157817 0.02060416 0.02598538</p>
-<p>Accuracy was used to select the optimal model using the largest value. The final value used for the model was mtry = 2. ###Results for using the rpart method were as follows: print(modelrpart) CART</p>
-<p>406 samples 124 predictors 5 classes: ‘A’, ‘B’, ‘C’, ‘D’, ‘E’</p>
-<p>No pre-processing Resampling: Bootstrapped (25 reps)</p>
-<p>Summary of sample sizes: 406, 406, 406, 406, 406, 406, …</p>
-<p>Resampling results across tuning parameters:</p>
-<p>cp Accuracy Kappa Accuracy SD Kappa SD 0.2323232 0.8105927 0.7626366 0.1663309 0.2073733 0.2356902 0.7867475 0.7328973 0.1520379 0.1893213 0.2659933 0.4620719 0.3151455 0.1182348 0.1705846</p>
-<p>Accuracy was used to select the optimal model using the largest value. The final value used for the model was cp = 0.2323232. ###Results for using the gbm method were as follows: model_gbm$results shrinkage interaction.depth n.trees Accuracy Kappa AccuracySD KappaSD 1 0.1 1 50 0.7077024 0.6263477 0.02597220 0.03253433 4 0.1 2 50 0.7879678 0.7295803 0.02472592 0.03195674 7 0.1 3 50 0.8201129 0.7708530 0.02132734 0.02768633 2 0.1 1 100 0.7613844 0.6957977 0.02507748 0.03227129 5 0.1 2 100 0.8270660 0.7798364 0.01954242 0.02504151 8 0.1 3 100 0.8500256 0.8091303 0.02366729 0.03015122 3 0.1 1 150 0.7862485 0.7277430 0.02613613 0.03373108 6 0.1 2 150 0.8415299 0.7983884 0.01763695 0.02251396 9 0.1 3 150 0.8586350 0.8201902 0.02058869 0.02622279</p>
-<p>confusionMatrix(model_gbm) Bootstrapped (25 reps) Confusion Matrix</p>
-<p>(entries are percentages of table totals)</p>
-<pre><code>      Reference</code></pre>
-<p>Prediction A B C D E A 27.7 2.0 0.5 0.5 0.5 B 0.7 14.6 1.2 0.3 1.1 C 0.4 1.1 15.4 1.3 0.8 D 0.2 0.5 1.0 13.2 0.7 E 0.3 0.6 0.0 0.6 15.0</p>
-<p>From the above evidence it is clear that using the rf method has the smallest error rate and the best accuracy. #Prediction accuracy accuracy of prediction on test data set ## Highest accuracy was 0.9922265 ## Estamated error rate was 0.44% model_rf_final &lt;- train(classe ~ ., method=“rf”, data=training)</p>
+<pre class="r"><code>print(model_rf)</code></pre>
+<pre><code>## Random Forest 
+## 
+## 1000 samples
+##   49 predictor
+##    5 classes: 'A', 'B', 'C', 'D', 'E' 
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## 
+## Summary of sample sizes: 1000, 1000, 1000, 1000, 1000, 1000, ... 
+## 
+## Resampling results across tuning parameters:
+## 
+##   mtry  Accuracy   Kappa      Accuracy SD  Kappa SD  
+##    2    0.8558817  0.8164737  0.01759454   0.02252620
+##   27    0.8566842  0.8177081  0.02146107   0.02734679
+##   53    0.8438109  0.8014089  0.02154578   0.02737131
+## 
+## Accuracy was used to select the optimal model using  the largest value.
+## The final value used for the model was mtry = 27.</code></pre>
+<pre class="r"><code>model_rf$finalModel</code></pre>
+<pre><code>## 
+## Call:
+##  randomForest(x = x, y = y, mtry = param$mtry) 
+##                Type of random forest: classification
+##                      Number of trees: 500
+## No. of variables tried at each split: 27
+## 
+##         OOB estimate of  error rate: 9.6%
+## Confusion matrix:
+##     A   B   C   D   E class.error
+## A 284   2   3   4   2  0.03728814
+## B  23 146  12   0   2  0.20218579
+## C   0  12 162   4   1  0.09497207
+## D   3   3   7 142   2  0.09554140
+## E   0   5   8   3 170  0.08602151</code></pre>
+</div>
+<div id="results-for-using-the-rpart-method-were-as-follows" class="section level3">
+<h3>Results for using the rpart method were as follows:</h3>
+<pre class="r"><code>print(model_rpart)</code></pre>
+<pre><code>## CART 
+## 
+## 1000 samples
+##   49 predictor
+##    5 classes: 'A', 'B', 'C', 'D', 'E' 
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## 
+## Summary of sample sizes: 1000, 1000, 1000, 1000, 1000, 1000, ... 
+## 
+## Resampling results across tuning parameters:
+## 
+##   cp          Accuracy   Kappa       Accuracy SD  Kappa SD  
+##   0.05531915  0.4144130  0.20238980  0.04702472   0.08757379
+##   0.05957447  0.4128626  0.19575753  0.04698724   0.08557457
+##   0.13049645  0.3360996  0.06245524  0.04764634   0.06752770
+## 
+## Accuracy was used to select the optimal model using  the largest value.
+## The final value used for the model was cp = 0.05531915.</code></pre>
+</div>
+<div id="results-for-using-the-gbm-method-were-as-follows" class="section level3">
+<h3>Results for using the gbm method were as follows:</h3>
+<pre class="r"><code>model_gbm$results</code></pre>
+<pre><code>##   shrinkage interaction.depth n.trees  Accuracy     Kappa AccuracySD
+## 1       0.1                 1      50 0.6988363 0.6148050 0.02206884
+## 4       0.1                 2      50 0.7642155 0.6990821 0.02190054
+## 7       0.1                 3      50 0.7967161 0.7407022 0.02467925
+## 2       0.1                 1     100 0.7423892 0.6712456 0.02437955
+## 5       0.1                 2     100 0.8046537 0.7509873 0.02028776
+## 8       0.1                 3     100 0.8295788 0.7828652 0.01939035
+## 3       0.1                 1     150 0.7694185 0.7059691 0.02187814
+## 6       0.1                 2     150 0.8250143 0.7769983 0.02080675
+## 9       0.1                 3     150 0.8424452 0.7993102 0.01901748
+##      KappaSD
+## 1 0.02859284
+## 4 0.02817429
+## 7 0.03174172
+## 2 0.03145884
+## 5 0.02595711
+## 8 0.02494505
+## 3 0.02823709
+## 6 0.02670613
+## 9 0.02431944</code></pre>
+<p>Confusion Matrix</p>
+<pre class="r"><code>confusionMatrix(model_gbm)</code></pre>
+<pre><code>## Bootstrapped (25 reps) Confusion Matrix 
+## 
+## (entries are percentages of table totals)
+##  
+##           Reference
+## Prediction    A    B    C    D    E
+##          A 27.7  2.2  0.4  0.2  0.3
+##          B  0.4 13.9  1.7  0.2  0.9
+##          C  0.7  2.0 14.7  1.4  1.1
+##          D  0.6  0.2  0.9 12.4  0.6
+##          E  0.1  0.7  0.3  1.0 15.6</code></pre>
+<p>From the above evidence it is clear that using the rf method has the smallest error rate and the best accuracy. #Prediction accuracy accuracy of prediction on test data set ## Highest accuracy was 0.9922265 ## Estamated error rate was 0.44%</p>
+<pre class="r"><code>model_rf_final &lt;- train(classe ~ ., method=&quot;rf&quot;, data=training)</code></pre>
 </div>
 <div id="results" class="section level2">
 <h2>results</h2>
-<p>Random Forest</p>
-<p>19216 samples 49 predictor 5 classes: ‘A’, ‘B’, ‘C’, ‘D’, ‘E’</p>
-<p>No pre-processing Resampling: Bootstrapped (25 reps)</p>
-<p>Summary of sample sizes: 19216, 19216, 19216, 19216, 19216, 19216, …</p>
-<p>Resampling results across tuning parameters:</p>
-<p>mtry Accuracy Kappa Accuracy SD Kappa SD<br /> 2 0.9922265 0.9901658 0.001131102 0.001432126 27 0.9928626 0.9909707 0.001341262 0.001699257 53 0.9854232 0.9815608 0.003682500 0.004652720</p>
-<p>Accuracy was used to select the optimal model using the largest value. The final value used for the model was mtry = 27.</p>
-<p>Call: randomForest(x = x, y = y, mtry = param$mtry) Type of random forest: classification Number of trees: 500 No. of variables tried at each split: 27</p>
-<pre><code>    OOB estimate of  error rate: 0.44%</code></pre>
-<p>Confusion matrix: A B C D E class.error A 5465 5 0 0 1 0.001096692 B 21 3691 6 0 0 0.007261969 C 0 9 3332 11 0 0.005966587 D 0 1 18 3125 3 0.006990785 E 0 1 3 6 3518 0.002834467</p>
-<p>confusionMatrix(model_rf) Bootstrapped (25 reps) Confusion Matrix</p>
-<p>(entries are percentages of table totals)</p>
-<pre><code>      Reference</code></pre>
-<p>Prediction A B C D E A 28.4 0.1 0.0 0.0 0.0 B 0.0 19.1 0.1 0.0 0.0 C 0.0 0.0 17.3 0.2 0.0 D 0.0 0.0 0.1 16.1 0.0 E 0.0 0.0 0.0 0.0 18.4</p>
+<pre class="r"><code>print(model_rf_final)</code></pre>
+<pre><code>## Random Forest 
+## 
+## 13451 samples
+##    49 predictor
+##     5 classes: 'A', 'B', 'C', 'D', 'E' 
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## 
+## Summary of sample sizes: 13451, 13451, 13451, 13451, 13451, 13451, ... 
+## 
+## Resampling results across tuning parameters:
+## 
+##   mtry  Accuracy   Kappa      Accuracy SD  Kappa SD   
+##    2    0.9881316  0.9849867  0.001345038  0.001695745
+##   27    0.9885859  0.9855620  0.001505229  0.001896930
+##   53    0.9817486  0.9769117  0.004706222  0.005955139
+## 
+## Accuracy was used to select the optimal model using  the largest value.
+## The final value used for the model was mtry = 27.</code></pre>
+<pre class="r"><code>model_rf_final$finalModel</code></pre>
+<pre><code>## 
+## Call:
+##  randomForest(x = x, y = y, mtry = param$mtry) 
+##                Type of random forest: classification
+##                      Number of trees: 500
+## No. of variables tried at each split: 27
+## 
+##         OOB estimate of  error rate: 0.74%
+## Confusion matrix:
+##      A    B    C    D    E class.error
+## A 3829    5    0    0    1 0.001564537
+## B   17 2572    7    0    0 0.009244992
+## C    0   13 2324    8    0 0.008955224
+## D    0    1   31 2175    0 0.014499320
+## E    0    0    6   10 2452 0.006482982</code></pre>
 <div id="when-run-on-our-test-data-this-is-what-we-got." class="section level3">
 <h3>When run on our test data this is what we got.</h3>
-<p>results &lt;- predict(model_rf, testing) table(testing$classe, results) ###Course test data ctest &lt;- tbl_df(pml.testing)</p>
+<pre class="r"><code>results &lt;- predict(model_rf, testing)
+table(testing$classe, results)</code></pre>
+<pre><code>##    results
+##        A    B    C    D    E
+##   A 1629   18    6    5   16
+##   B  101  935   59   26   18
+##   C    0   44  954   25    3
+##   D   17    3   87  851    6
+##   E    5   25   43   41  968</code></pre>
+</div>
+<div id="course-test-data" class="section level3">
+<h3>Course test data</h3>
+<pre class="r"><code>ctest &lt;- tbl_df(pml.testing)</code></pre>
 </div>
 <div id="predicting-our-answers" class="section level3">
 <h3>Predicting our answers</h3>
-<p>answers &lt;- predict(model_rf_final, ctest) answers are B A B A A E D B A A B C B A E E A B B B When submitted all of the answers had been predicted correctly.</p>
+<pre class="r"><code>answers &lt;- predict(model_rf_final, ctest)
+answers </code></pre>
+<pre><code>##  [1] B A B A A E D B A A B C B A E E A B B B
+## Levels: A B C D E</code></pre>
+<p>When submitted all of the answers had been predicted correctly.</p>
 </div>
 <div id="conclusion" class="section level3">
 <h3>Conclusion</h3>
