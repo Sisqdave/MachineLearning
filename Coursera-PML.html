@@ -109,80 +109,6 @@ testing &lt;- pmlData[-inTrain,]</code></pre>
 <pre class="r"><code>training &lt;- tbl_df(training)
 training &lt;- training[training$new_window==&quot;no&quot;,]
 dataNA &lt;- lapply(training, mean) == &quot;NA&quot;</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
-<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
-## returning NA</code></pre>
 <pre class="r"><code>NAvar &lt;- names(training[dataNA])
 training &lt;- select(training, -one_of(NAvar[2:102]))
 var2 &lt;- c(&quot;X&quot;,&quot;raw_timestamp_part_1&quot;,&quot;raw_timestamp_part_2&quot;,&quot;num_window&quot; )
@@ -364,7 +290,7 @@ model_rf &lt;- train(classe ~ ., method=&quot;rf&quot;, data=trainingSample)</co
 ## E    0    0    6   10 2452 0.006482982</code></pre>
 <div id="when-run-on-our-test-data-this-is-what-we-got." class="section level3">
 <h3>When run on our test data this is what we got.</h3>
-<pre class="r"><code>results &lt;- predict(model_rf, testing)
+<pre class="r"><code>results &lt;- predict(model_rf_final, testing)
 table(testing$classe, results)</code></pre>
 <pre><code>##    results
 ##        A    B    C    D    E
